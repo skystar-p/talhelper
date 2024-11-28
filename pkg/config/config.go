@@ -41,24 +41,25 @@ type Node struct {
 }
 
 type NodeConfigs struct {
-	NodeLabels          map[string]string              `yaml:"nodeLabels" jsonschema:"description=Labels to be added to the node, supports templating"`
-	NodeAnnotations     map[string]string              `yaml:"nodeAnnotations" jsonschema:"description=Annotations to be added to the node, supports templating"`
-	NodeTaints          map[string]string              `yaml:"nodeTaints" jsonschema:"description=Node taints for the node. Effect is optional"`
-	MachineDisks        []*v1alpha1.MachineDisk        `yaml:"machineDisks,omitempty" jsonschema:"description=List of additional disks to partition, format, mount"`
-	MachineFiles        []*v1alpha1.MachineFile        `yaml:"machineFiles,omitempty" jsonschema:"description=List of files to create inside the node"`
-	DisableSearchDomain bool                           `yaml:"disableSearchDomain,omitempty" jsonschema:"description=Whether to disable generating default search domain"`
-	KernelModules       []*v1alpha1.KernelModuleConfig `yaml:"kernelModules,omitempty" jsonschema:"description=List of additional kernel modules to load inside the node"`
-	Nameservers         []string                       `yaml:"nameservers,omitempty" jsonschema:"description=List of nameservers for the node"`
-	NetworkInterfaces   []*v1alpha1.Device             `yaml:"networkInterfaces,omitempty" jsonschema:"description=List of network interface configuration for the node"`
-	ExtraManifests      []string                       `yaml:"extraManifests,omitempty" jsonschema:"description=List of manifest files to be added to the node"`
-	Patches             []string                       `yaml:"patches,omitempty" jsonschema:"description=Patches to be applied to the node"`
-	TalosImageURL       string                         `yaml:"talosImageURL" jsonschema:"example=factory.talos.dev/installer/e9c7ef96884d4fbc8c0a1304ccca4bb0287d766a8b4125997cb9dbe84262144e,description=Talos installer image url for the node"`
-	NoSchematicValidate bool                           `yaml:"noSchematicValidate" jsonschema:"description=Whether to skip schematic validation"`
-	Schematic           *schematic.Schematic           `yaml:"schematic,omitempty" jsonschema:"description=Talos image customization to be used in the installer image"`
-	IsoSchematic        *schematic.Schematic           `yaml:"isoSchematic,omitempty" jsonschema:"description=Talos image customization to be used for ISO image"`
-	MachineSpec         MachineSpec                    `yaml:"machineSpec,omitempty" jsonschema:"description=Machine hardware specification"`
-	IngressFirewall     *IngressFirewall               `yaml:"ingressFirewall,omitempty" jsonschema:"description=Machine firewall specification"`
-	ExtensionServices   []*ExtensionService            `yaml:"extensionServices,omitempty" jsonschema:"description=Machine extension services specification"`
+	NodeLabels            map[string]string              `yaml:"nodeLabels" jsonschema:"description=Labels to be added to the node, supports templating"`
+	NodeAnnotations       map[string]string              `yaml:"nodeAnnotations" jsonschema:"description=Annotations to be added to the node, supports templating"`
+	NodeTaints            map[string]string              `yaml:"nodeTaints" jsonschema:"description=Node taints for the node. Effect is optional"`
+	MachineDisks          []*v1alpha1.MachineDisk        `yaml:"machineDisks,omitempty" jsonschema:"description=List of additional disks to partition, format, mount"`
+	MachineFiles          []*v1alpha1.MachineFile        `yaml:"machineFiles,omitempty" jsonschema:"description=List of files to create inside the node"`
+	DisableSearchDomain   bool                           `yaml:"disableSearchDomain,omitempty" jsonschema:"description=Whether to disable generating default search domain"`
+	KernelModules         []*v1alpha1.KernelModuleConfig `yaml:"kernelModules,omitempty" jsonschema:"description=List of additional kernel modules to load inside the node"`
+	Nameservers           []string                       `yaml:"nameservers,omitempty" jsonschema:"description=List of nameservers for the node"`
+	NetworkInterfaces     []*v1alpha1.Device             `yaml:"networkInterfaces,omitempty" jsonschema:"description=List of network interface configuration for the node"`
+	ExtraManifests        []string                       `yaml:"extraManifests,omitempty" jsonschema:"description=List of manifest files to be added to the node"`
+	Patches               []string                       `yaml:"patches,omitempty" jsonschema:"description=Patches to be applied to the node"`
+	TalosImageURL         string                         `yaml:"talosImageURL" jsonschema:"example=factory.talos.dev/installer/e9c7ef96884d4fbc8c0a1304ccca4bb0287d766a8b4125997cb9dbe84262144e,description=Talos installer image url for the node"`
+	NoSchematicValidate   bool                           `yaml:"noSchematicValidate" jsonschema:"description=Whether to skip schematic validation"`
+	Schematic             *schematic.Schematic           `yaml:"schematic,omitempty" jsonschema:"description=Talos image customization to be used in the installer image"`
+	IsoSchematic          *schematic.Schematic           `yaml:"isoSchematic,omitempty" jsonschema:"description=Talos image customization to be used for ISO image"`
+	MachineSpec           MachineSpec                    `yaml:"machineSpec,omitempty" jsonschema:"description=Machine hardware specification"`
+	IngressFirewall       *IngressFirewall               `yaml:"ingressFirewall,omitempty" jsonschema:"description=Machine firewall specification"`
+	ExtensionServices     []*ExtensionService            `yaml:"extensionServices,omitempty" jsonschema:"description=Machine extension services specification"`
+	ExtensionServiceFiles []string                       `yaml:"extensionServiceFiles,omitempty" jsonschema:"description=Machine extension services specification files"`
 }
 
 type ImageFactory struct {

@@ -1,28 +1,55 @@
 package talos
 
 import (
+	"os"
+
 	"github.com/budimanjojo/talhelper/v3/pkg/config"
+	"github.com/budimanjojo/talhelper/v3/pkg/decrypt"
 	"github.com/siderolabs/talos/pkg/machinery/config/types/runtime/extensions"
+	"gopkg.in/yaml.v3"
 )
 
 func GenerateExtensionServicesConfigBytes(esCfgs []*config.ExtensionService) ([]byte, error) {
-	var result [][]byte
-
 	exts, err := GenerateNodeExtensionServiceConfig(esCfgs)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, ext := range exts {
-		extByte, err := marshalYaml(ext)
+	return marshalAndCombineExtensionServiceYamls(exts)
+}
+
+func GenerateNodeExtensionServiceConfigBytesFromFiles(files []string) ([]byte, error) {
+	var result []*extensions.ServiceConfigV1Alpha1
+
+	var (
+		content []byte
+		err     error
+	)
+
+	for _, file := range files {
+		// Try to decrypt with sops first.
+		content, err = decrypt.DecryptYamlWithSops(file)
 		if err != nil {
+			// If failed, read the file as is.
+			content, err = os.ReadFile(file)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		var config extensions.ServiceConfigV1Alpha1
+		if err := yaml.Unmarshal(content, &config); err != nil {
 			return nil, err
 		}
 
-		result = append(result, extByte)
+		if _, err := config.Validate(nil); err != nil {
+			return nil, err
+		}
+
+		result = append(result, &config)
 	}
 
-	return CombineYamlBytes(result), nil
+	return marshalAndCombineExtensionServiceYamls(result)
 }
 
 func GenerateNodeExtensionServiceConfig(esCfgs []*config.ExtensionService) ([]*extensions.ServiceConfigV1Alpha1, error) {
@@ -42,4 +69,19 @@ func GenerateNodeExtensionServiceConfig(esCfgs []*config.ExtensionService) ([]*e
 	}
 
 	return result, nil
+}
+
+func marshalAndCombineExtensionServiceYamls(exts []*extensions.ServiceConfigV1Alpha1) ([]byte, error) {
+	var result [][]byte
+
+	for _, ext := range exts {
+		extByte, err := marshalYaml(ext)
+		if err != nil {
+			return nil, err
+		}
+
+		result = append(result, extByte)
+	}
+
+	return CombineYamlBytes(result), nil
 }
